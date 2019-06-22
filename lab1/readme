@@ -1,0 +1,3 @@
+how to run:
+make
+./lab1 -n NUMBER_OF_THREADS
