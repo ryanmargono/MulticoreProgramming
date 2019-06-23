@@ -12,3 +12,4 @@ Lab 0 Rubric
 score = 80
 
 -10 = does not use templates as required; -10 = test does not use find(K, V)
+-0 = did not get the commit hash but graded anyway; for future labs / assignments you should make sure to send the commit hash to professor and me (hh1834@nyu.edu)
