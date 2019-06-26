@@ -1,0 +1,15 @@
+lab_0_grade
+
+Lab 0 Rubric
++10 = insert(…) works properly
++10 = find(k) works properly
++10 = find(k, v) works properly
++10 = remove(…) works properly
++35 = performs 10 tests using insert(…), find(k), and find(k, v)
++20 = uses std:: list or vector, uses templates as required, and programs runs in O(n) time
++5 = provides makefile / general instructions and readme files and provides good readability in general by using comments 
+
+score = 90
+
+-10 = does not use templates as required; 
+-0 = did not get the commit hash but graded anyway; for future labs / assignments you should make sure to send the commit hash to professor and me (hh1834@nyu.edu)
