@@ -9,7 +9,7 @@ Lab 0 Rubric
 +20 = uses std:: list or vector, uses templates as required, and programs runs in O(n) time
 +5 = provides makefile / general instructions and readme files and provides good readability in general by using comments 
 
-score = 80
+score = 90
 
--10 = does not use templates as required; -10 = test does not use find(K, V)
+-10 = does not use templates as required; 
 -0 = did not get the commit hash but graded anyway; for future labs / assignments you should make sure to send the commit hash to professor and me (hh1834@nyu.edu)
