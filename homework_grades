@@ -1,3 +1,7 @@
 hw1
 87.5
 -0 = Q1 give more details next time; -12.5 Q2 = incorrect; -0 = Q3 please show computation steps next time 
+
+hw2
+82.5
+-0 = Q2 no deductions but is it true that all use mutices?; -7.5 = Q3 no matter what you do you have to return an int from the function aggregateStats(); -5 = Q4 going to deduct less because of the correct logic but the question asked you to modify aggregateStats() so that it could be used any number of times with different arguments and not just once from each thread; -5 = Q6B had to only use semaphores
