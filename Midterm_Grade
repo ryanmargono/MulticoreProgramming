@@ -1,0 +1,8 @@
+Midterm_Grade
+
+*** the maximum grade for subpar solution (single global rw lock) for Q3 was 23
+and the maximum grade for optimal solution was 35 
+
+Q1(10) Q2(15) Q3(35) Q4(20) Q5(10) Q6(10) B1(2) B2(1) Total_Score
+
+8	11	23	0	2	4	0	0	48
