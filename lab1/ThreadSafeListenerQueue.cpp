@@ -21,10 +21,10 @@ public:
 };
 
 template <class T> bool ThreadSafeListenerQueue<T>::push(const T element) {
-    lock_guard<mutex> lk(mut);
-    data.push_back(element);
-    data_cond.notify_one();
-    return true;
+    // lock_guard<mutex> lk(mut);
+    // data.push_back(element);
+    // data_cond.notify_one();
+    // return true;
 }
 
 template <class T> bool ThreadSafeListenerQueue<T>::pop(T &element) {
