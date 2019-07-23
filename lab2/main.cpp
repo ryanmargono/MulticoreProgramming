@@ -4,18 +4,20 @@
 #include <unistd.h>
 #include "Data.cpp"
 #include <random>
+#include <cmath>
 
 #include <vector>
 #include <array>
 #include <math.h>
 #include <limits>
+#include <random>
 
 using namespace std;
 
 // decalre functions and variables
 int N_Coefficients;
 int N_Threads;
-int Threshold;
+float Threshold;
 vector<vector<int>> Coords;
 ThreadSafeListenerQueue<Data *> *best_coefficients;
 ThreadSafeListenerQueue<Data *> *best_results;
@@ -77,9 +79,14 @@ float get_fitness(vector<float> coeffiecients)
     return result;
 }
 
-float get_random_float(int max, int min)
+float get_random_float(int min, int max)
 {
-    return ((float(rand()) / float(RAND_MAX)) * (max - min)) + min;
+    random_device rd;
+    mt19937 eng(rd());
+    uniform_real_distribution<> distribution(min, max);
+    float result = distribution(eng);
+    cout << min << " " << max << " " << result << endl;
+    return result;
 }
 
 vector<float> generate_coefficients()
@@ -97,13 +104,15 @@ vector<float> generate_coefficients()
     return coefficients;
 }
 
-vector<float> mutate(vector<float> coefficients)
+vector<float> mutate(vector<float> coefficients, float fitness)
 {
     vector<float> result;
+    float bounds = log (fitness);
+    cout << fitness << bounds <<endl;
     int i;
     for (i = 0; i < N_Coefficients; i++)
     {
-        float mutated = coefficients[i] + get_random_float(-1, 1);
+        float mutated = coefficients[i] + get_random_float(bounds * -1 , bounds);
         result.push_back(mutated);
     }
     return result;
@@ -122,10 +131,16 @@ void *run_alg(void *threadid)
         Data *local_best = new Data();
         local_best->fitness = global_best->fitness;
         local_best->coefficients = global_best->coefficients;
+        float offset = 0;
         while (global_best->fitness <= local_best->fitness)
         {
-            local_best->coefficients = mutate(local_best->coefficients);
-            local_best->fitness = get_fitness(local_best->coefficients);
+            vector<float> temp_coefficients = mutate(local_best->coefficients, local_best->fitness);
+            float temp_fitness = get_fitness(temp_coefficients);
+            if (temp_fitness < local_best->fitness) 
+            {
+                local_best->coefficients = temp_coefficients;
+                local_best->fitness = temp_fitness;
+            }
         }
 
         // push data to results for main to process
@@ -149,8 +164,11 @@ int main(int argc, char *argv[])
     int i;
     for (i = 0; i < N_Coefficients; i++)
     {
-        int x = rand() % 20 + (-10);
-        int y = rand() % 20 + (-10);
+        random_device rd;
+        mt19937 eng(rd());
+        uniform_int_distribution<> distr(-5, 5);
+        int x = distr(eng);
+        int y = distr(eng);
         vector<int> current_coord = {x, y};
         Coords.push_back(current_coord);
         cout << "(" << x << "," << y << ")" << endl;
@@ -191,10 +209,14 @@ int main(int argc, char *argv[])
         // update best coefficients if found
         if (possible_best->fitness < best_data->fitness)
         {
+            cout << "best: " << possible_best->fitness << endl;
             best_data->fitness = possible_best->fitness;
             best_data->coefficients = possible_best->coefficients;
         }
-
+        else
+            {
+                cout << "worse: " << possible_best->fitness << endl;
+            }
         // requeue best coefficients to be used if the threshold hasn't been met. Workers won't be given coefficients that are not progressive.
         best_coefficients->push(best_data);
     }
