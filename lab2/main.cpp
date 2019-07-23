@@ -79,13 +79,13 @@ float get_fitness(vector<float> coeffiecients)
     return result;
 }
 
-float get_random_float(int min, int max)
+float get_random_float(float min, float max)
 {
     random_device rd;
     mt19937 eng(rd());
     uniform_real_distribution<> distribution(min, max);
     float result = distribution(eng);
-    cout << min << " " << max << " " << result << endl;
+    // cout << min << " " << max << " " << result << endl;
     return result;
 }
 
