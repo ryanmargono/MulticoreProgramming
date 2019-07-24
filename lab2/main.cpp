@@ -108,10 +108,6 @@ vector<float> mutate(vector<float> coefficients, float fitness)
 {
     vector<float> result;
     float bounds = log (fitness); // adjust range of change based on fitness
-    // if (N_Coefficients-1 == 1)
-    // {
-    //     bounds = 1;
-    // } 
     // cout << fitness << bounds <<endl;
     int i;
     for (i = 0; i < N_Coefficients; i++)
