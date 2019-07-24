@@ -1,3 +1,23 @@
 how to run:
 make
 ./lab2 number_of_threads degree_of_polynomial fit_threshold
+
+explanation:
+- random coordinates (x,y) are generated where x and y are integers -5 and 5.
+- the number of coords generated is equal to the degree of polynomial + 1.
+- random coefficients from float in [-10, 10] are generated and their fitness is calculated.
+- this data will be used as the initial baseline minimum, and it is pushed N_Threads times to to coefficient queue for the threads to work on.
+
+- each thread is then created and runs the alg:
+- forever, they will listen to coefficients queue and pull the best coefficients from it.
+- it then mutates the coefficients until a better fitness is found.
+- the mutation is as follows: the existing coefficients are added with a random float between [-log(fitness), log(fitness)]
+- this way, the closer the fitness gets to the target, the smaller the increments will be.
+- once a better fitness is found, the coefficients and fitness are pushed to a results queue.
+
+- while this is all happening, the main thread is listening to the results queue.
+- it compares the fitness to a local minimum and updates accordingly.
+- once the fitness is under a certain threshold, it prints out the results and terminates the program.
+
+testing:
+Testing was done non-programatically. The results given from the program was plugged into a graphing calculator to see if they were close to intersecting the given coords.

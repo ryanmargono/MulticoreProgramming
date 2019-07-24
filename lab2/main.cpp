@@ -107,8 +107,12 @@ vector<float> generate_coefficients()
 vector<float> mutate(vector<float> coefficients, float fitness)
 {
     vector<float> result;
-    float bounds = log (fitness);
-    cout << fitness << bounds <<endl;
+    float bounds = log (fitness); // adjust range of change based on fitness
+    // if (N_Coefficients-1 == 1)
+    // {
+    //     bounds = 1;
+    // } 
+    // cout << fitness << bounds <<endl;
     int i;
     for (i = 0; i < N_Coefficients; i++)
     {
@@ -159,7 +163,7 @@ int main(int argc, char *argv[])
     best_results = new ThreadSafeListenerQueue<Data *>;
     best_coefficients = new ThreadSafeListenerQueue<Data *>;
 
-    // generate random coords, random int between -10 and 10.
+    // generate random coords, random int between -5 and 5.
     cout << "\nrandomized coords:" << endl;
     int i;
     for (i = 0; i < N_Coefficients; i++)
@@ -213,10 +217,6 @@ int main(int argc, char *argv[])
             best_data->fitness = possible_best->fitness;
             best_data->coefficients = possible_best->coefficients;
         }
-        else
-            {
-                cout << "worse: " << possible_best->fitness << endl;
-            }
         // requeue best coefficients to be used if the threshold hasn't been met. Workers won't be given coefficients that are not progressive.
         best_coefficients->push(best_data);
     }
