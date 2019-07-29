@@ -1,0 +1,3 @@
+how to run:
+make
+./lab3opt number_of_threads degree_of_polynomial fit_threshold

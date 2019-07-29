@@ -42,6 +42,26 @@
         "mutex": "cpp",
         "numeric": "cpp",
         "ratio": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "atomic": "cpp",
+        "bitset": "cpp",
+        "cfenv": "cpp",
+        "charconv": "cpp",
+        "cinttypes": "cpp",
+        "codecvt": "cpp",
+        "complex": "cpp",
+        "csetjmp": "cpp",
+        "csignal": "cpp",
+        "cstddef": "cpp",
+        "cstring": "cpp",
+        "cuchar": "cpp",
+        "forward_list": "cpp",
+        "functional": "cpp",
+        "future": "cpp",
+        "iomanip": "cpp",
+        "scoped_allocator": "cpp",
+        "shared_mutex": "cpp",
+        "typeindex": "cpp",
+        "valarray": "cpp"
     }
 }
