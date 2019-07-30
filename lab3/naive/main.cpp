@@ -24,6 +24,7 @@ vector<vector<int>> Coords;
 ThreadSafeListenerQueue<Data *> *best_coefficients;
 ThreadSafeListenerQueue<Data *> *best_results;
 ThreadSafeListenerQueue<double> *thread_times;
+ThreadSafeListenerQueue<int> *thread_loops;
 
 void print(vector<float> const &input)
 {
@@ -149,6 +150,7 @@ void *run_alg(void *threadid)
                 local_best->coefficients = temp_coefficients;
                 local_best->fitness = temp_fitness;
             }
+            thread_loops->push(1);
         }
 
         // push data to results for main to process
@@ -176,6 +178,8 @@ int main(int argc, char *argv[])
     best_results = new ThreadSafeListenerQueue<Data *>;
     best_coefficients = new ThreadSafeListenerQueue<Data *>;
     thread_times = new ThreadSafeListenerQueue<double>;
+    thread_loops = new ThreadSafeListenerQueue<int>;
+
 
     // generate random coords, random int between -5 and 5.
     cout << "\nrandomized coords:" << endl;
@@ -231,7 +235,7 @@ int main(int argc, char *argv[])
         // update best coefficients if found
         if (possible_best->fitness < best_data->fitness)
         {
-            cout << "best: " << possible_best->fitness << endl;
+            // cout << "best: " << possible_best->fitness << endl;
             best_guesses ++; 
             best_data->fitness = possible_best->fitness;
             best_data->coefficients = possible_best->coefficients;
@@ -276,7 +280,7 @@ int main(int argc, char *argv[])
 
     duration = (clock() - start ) / (double) CLOCKS_PER_SEC;
     cout<<"\ntotal runtime: "<< duration << endl;
-    cout<<"total guesses: "<< total_guesses << endl;
+    cout<<"total thread iterations: "<< thread_loops->data.size() << endl;
     cout<<"total best guesses: " << best_guesses << endl;
     exit(0);
 };

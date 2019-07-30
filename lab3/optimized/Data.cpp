@@ -3,6 +3,6 @@
 using namespace std; 
 
 struct Data {
-    vector<float> coefficients;
-    float fitness;
+    vector<double> coefficients;
+    double fitness;
 };

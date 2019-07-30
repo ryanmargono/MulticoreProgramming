@@ -19,13 +19,13 @@ using namespace std;
 // decalre functions and variables
 int N_Coefficients;
 int N_Threads;
-float Threshold;
+double Threshold;
 vector<vector<int>> Coords;
 ThreadSafeListenerQueue<Data *> *best_coefficients;
 ThreadSafeListenerQueue<Data *> *best_results;
 ThreadSafeListenerQueue<double> *thread_times;
 
-void print(vector<float> const &input)
+void print(vector<double> const &input)
 {
     for (int i = 0; i < input.size(); i++)
     {
@@ -40,9 +40,9 @@ void print_result(Data *data)
     cout << "\nfitness: " << data->fitness << endl;
 }
 
-float evaluate(vector<float> coefficients, int x)
+double evaluate(vector<double> coefficients, int x)
 {
-    float result = 0;
+    double result = 0;
     double degree = 1.0 * (N_Coefficients - 1);
     int i = 0;
     while (degree > 0)
@@ -56,50 +56,45 @@ float evaluate(vector<float> coefficients, int x)
     return result;
 }
 
-float get_distance(vector<int> coord, vector<float> coefficients)
+double get_distance(vector<int> coord, vector<double> coefficients)
 {
     int x1 = coord[0];
     int y1 = coord[1];
-    float y2 = evaluate(coefficients, x1);
-    float result = (y1 - y2) * (y1 - y2);
+    double y2 = evaluate(coefficients, x1);
+    double result = (y1 - y2) * (y1 - y2);
     // cout << "distance: " << result << endl;
     return result;
 }
 
-float get_fitness(vector<float> coeffiecients)
+double get_fitness(vector<double> coeffiecients)
 {
-    // cout << "processing coefficients: ";
-    // print(coeffiecients);
-    // cout << endl;
-
-    float result = 0;
+    double result = 0;
     int i;
     for (i = 0; i < N_Coefficients; i++)
     {
         result += get_distance(Coords[i], coeffiecients);
     }
-    // cout << "fitness: " << result << "\n"<< endl;
     return result;
 }
 
-float get_random_float(float min, float max)
+double get_random_double(double min, double max)
 {
     random_device rd;
     mt19937 eng(rd());
     uniform_real_distribution<> distribution(min, max);
-    float result = distribution(eng);
+    double result = distribution(eng);
     // cout << min << " " << max << " " << result << endl;
     return result;
 }
 
-vector<float> generate_coefficients()
+vector<double> generate_coefficients()
 {
     // cout << "generating random coefficients: " << endl;
-    vector<float> coefficients;
+    vector<double> coefficients;
     int i;
     for (i = 0; i < N_Coefficients; i++)
     {
-        float random = get_random_float(-10, 10);
+        double random = get_random_double(-10, 10);
         coefficients.push_back(random);
         // cout << random << endl;
     }
@@ -107,15 +102,15 @@ vector<float> generate_coefficients()
     return coefficients;
 }
 
-vector<float> mutate(vector<float> coefficients, float fitness)
+vector<double> mutate(vector<double> coefficients, double fitness)
 {
-    vector<float> result;
-    float bounds = log (fitness); // adjust range of change based on fitness
-    // cout << fitness << bounds <<endl;
+    vector<double> result;
+    double bounds = log (fitness); // adjust range of change based on fitness
+    // cout << fitness << " " << bounds <<endl;
     int i;
     for (i = 0; i < N_Coefficients; i++)
     {
-        float mutated = coefficients[i] + get_random_float(bounds * -1 , bounds);
+        double mutated = coefficients[i] + get_random_double(bounds * -1 , bounds);
         result.push_back(mutated);
     }
     return result;
@@ -135,21 +130,10 @@ void *run_alg(void *threadid)
         Data *global_best;
         best_coefficients->listen(global_best);
 
-        // mutate coords until we have coefficients that yield better fitness
+        // mute coefficients
         Data *local_best = new Data();
-        local_best->fitness = global_best->fitness;
-        local_best->coefficients = global_best->coefficients;
-        float offset = 0;
-        while (global_best->fitness <= local_best->fitness)
-        {
-            vector<float> temp_coefficients = mutate(local_best->coefficients, local_best->fitness);
-            float temp_fitness = get_fitness(temp_coefficients);
-            if (temp_fitness < local_best->fitness) 
-            {
-                local_best->coefficients = temp_coefficients;
-                local_best->fitness = temp_fitness;
-            }
-        }
+        local_best->coefficients = mutate(global_best->coefficients, global_best->fitness);
+        local_best->fitness = get_fitness(local_best->coefficients);
 
         // push data to results for main to process
         best_results->push(local_best);
@@ -171,7 +155,7 @@ int main(int argc, char *argv[])
     // read arguments from command line
     N_Threads = atoi(argv[1]);
     N_Coefficients = atoi(argv[2]) + 1;
-    Threshold = atoi(argv[3]);
+    Threshold = atoi(argv[3]) + 0.0;
 
     best_results = new ThreadSafeListenerQueue<Data *>;
     best_coefficients = new ThreadSafeListenerQueue<Data *>;
@@ -182,20 +166,42 @@ int main(int argc, char *argv[])
     int i;
     for (i = 0; i < N_Coefficients; i++)
     {
-        random_device rd;
-        mt19937 eng(rd());
-        uniform_int_distribution<> distr(-5, 5);
-        int x = distr(eng);
-        int y = distr(eng);
-        vector<int> current_coord = {x, y};
-        Coords.push_back(current_coord);
-        cout << "(" << x << "," << y << ")" << endl;
+        // random_device rd;
+        // mt19937 eng(rd());
+        // uniform_int_distribution<> distr(-5, 5);
+        // int x = distr(eng);
+        // int y = distr(eng);
+        // vector<int> current_coord = {x, y};
+        // Coords.push_back(current_coord);
+        // cout << "(" << x << "," << y << ")" << endl;
+
+        if (i==0) {
+            vector<int> current_coord = {-1, 3};
+            Coords.push_back(current_coord);
+        }
+        if (i==1){
+            vector<int> current_coord = {-4, 2};
+            Coords.push_back(current_coord);
+        }
+        if (i==2){
+            vector<int> current_coord = {-3, -2};
+            Coords.push_back(current_coord);
+        }
+        if (i==3){
+            vector<int> current_coord = {-5, 1};
+            Coords.push_back(current_coord);
+        }
+        if (i==4){
+            vector<int> current_coord = {4, 1};
+            Coords.push_back(current_coord);
+        }
     }
+    cout << Coords.size() << endl;
     cout << endl;
 
     // generate first random coefficients and evaluate
-    vector<float> coefficients = generate_coefficients();
-    float fitness = get_fitness(coefficients);
+    vector<double> coefficients = generate_coefficients();
+    double fitness = get_fitness(coefficients);
 
     Data *best_data = new Data();
     best_data->coefficients = coefficients;
@@ -219,10 +225,13 @@ int main(int argc, char *argv[])
 
     int total_guesses = 0;
     int best_guesses = 0;
+    double best_fitness = best_data->fitness;
 
     // listen to the result queue. if the result is under a certain threshold, terminate program.
-    while (best_data->fitness > Threshold)
+    while (best_fitness >= Threshold)
     {
+        cout << best_fitness << endl;
+        if (best_fitness == Threshold) cout << 'here' << endl;
         // listen to results queue
         Data *possible_best;
         best_results->listen(possible_best);
@@ -231,10 +240,11 @@ int main(int argc, char *argv[])
         // update best coefficients if found
         if (possible_best->fitness < best_data->fitness)
         {
-            cout << "best: " << possible_best->fitness << endl;
+            // cout << "best: " << possible_best->fitness << endl;
             best_guesses ++; 
             best_data->fitness = possible_best->fitness;
             best_data->coefficients = possible_best->coefficients;
+            best_fitness = best_data->fitness;
         }
         // requeue best coefficients to be used if the threshold hasn't been met. Workers won't be given coefficients that are not progressive.
         best_coefficients->push(best_data);
@@ -276,7 +286,7 @@ int main(int argc, char *argv[])
 
     duration = (clock() - start ) / (double) CLOCKS_PER_SEC;
     cout<<"\ntotal runtime: "<< duration << endl;
-    cout<<"total guesses: "<< total_guesses << endl;
+    cout<<"total thread iterations: "<< total_guesses << endl;
     cout<<"total best guesses: " << best_guesses << endl;
     exit(0);
 };
