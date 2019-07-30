@@ -5,3 +5,7 @@ hw1
 hw2
 82.5
 -0 = Q2 no deductions but is it true that all use mutices?; -7.5 = Q3 no matter what you do you have to return an int from the function aggregateStats(); -5 = Q4 going to deduct less because of the correct logic but the question asked you to modify aggregateStats() so that it could be used any number of times with different arguments and not just once from each thread; -5 = Q6B had to only use semaphores
+
+hw3
+80
+-8 = Q1(c) not submitted; -6 = Q3 missing the bug that if nan function returns without unlocking; -6 = Q3 missing the bug that in computeaverage function returns before unlocking
