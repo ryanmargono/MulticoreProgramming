@@ -9,3 +9,7 @@ hw2
 hw3
 80
 -8 = Q1(c) not submitted; -6 = Q3 missing the bug that if nan function returns without unlocking; -6 = Q3 missing the bug that in computeaverage function returns before unlocking
+
+hw4
+81.5
+-6.25 = Q1(b) insufficient; -6 = Q2 no mention of hardware primitives; -6.25 = Q4(b) should mention caching would work with x86 like architectures 
