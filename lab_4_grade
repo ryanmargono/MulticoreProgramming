@@ -1,0 +1,5 @@
+lab_4_grade
+
+60
+
+-10 = line 26 ThreadSafeKVStore.cpp = error: no match for 'operator-' it = data.end() - 1; -10 = paragraph discussing the program missing; -5 = should have used abs() in distance calculation main.cpp line 62; -15 = futility_counter line 17 not protected by any locks
